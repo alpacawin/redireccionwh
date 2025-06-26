@@ -3,54 +3,69 @@
 <head>
   <meta charset="UTF-8">
   <title>Redireccionándote a Alpaca...</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <style>
+    * {
+      box-sizing: border-box;
+    }
+
     body {
       margin: 0;
       padding: 0;
-      background: #f7f7f7;
-      font-family: 'Courier New', monospace;
-      color: #555;
+      background: linear-gradient(135deg, #1a1a1a, #2a2a2a);
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      color: #fff;
       display: flex;
       flex-direction: column;
-      align-items: center;
       justify-content: center;
+      align-items: center;
       height: 100vh;
       text-align: center;
+      overflow: hidden;
     }
 
-    img {
-      width: 120px;
+    .logo {
+      width: 160px;
       height: auto;
       margin-bottom: 20px;
-      animation: jump 1s infinite ease-in-out;
+      animation: pulse 2s infinite;
+      filter: drop-shadow(0 0 10px #00ffcc);
     }
 
     h1 {
-      font-size: 18px;
-      margin: 0;
+      font-size: 24px;
+      color: #00ffcc;
+      margin-bottom: 10px;
+      animation: fadeIn 2s ease-in-out;
     }
 
-    @keyframes jump {
-      0%, 100% { transform: translateY(0); }
-      50% { transform: translateY(-10px); }
+    .sub {
+      font-size: 16px;
+      color: #ccc;
+      animation: fadeIn 3s ease-in-out;
     }
 
-    .info {
-      font-size: 14px;
-      color: #999;
-      margin-top: 10px;
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.05); }
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
     }
   </style>
 </head>
 <body>
-  <img src="logo.png" alt="AlpacaBot">
-  <h1>Redireccionándote a Alpaca...</h1>
-  <div class="info">Si no sos redirigido, hacé clic <a href="https://alpacaBet.co">aquí</a>.</div>
+
+  <img src="logo.png" alt="Alpaca Logo" class="logo">
+  <h1>Conectando con la suerte...</h1>
+  <div class="sub">Estás entrando a <strong>AlpacaBet</strong></div>
 
   <script>
     setTimeout(() => {
       window.location.href = "https://alpacaBet.co";
-    }, 5000); // 5 segundos
+    }, 5000); // redirige en 5 segundos
   </script>
 </body>
 </html>
