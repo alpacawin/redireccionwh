@@ -5,62 +5,34 @@
   <title>Redireccionándote a Alpaca...</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <style>
-    body {
+    html, body {
       margin: 0;
       padding: 0;
-      background: #111;
-      color: #fff;
-      font-family: 'Courier New', monospace;
       overflow: hidden;
+      background: linear-gradient(145deg, #0d0d0d, #1a1a1a);
+      font-family: 'Segoe UI', sans-serif;
     }
 
-    .game-area {
-      position: relative;
-      width: 100vw;
-      height: 100vh;
-      background: #1a1a1a;
-      overflow: hidden;
-    }
-
-    .dino {
-      position: absolute;
-      bottom: 20px;
-      left: 50px;
-      width: 80px;
-      height: auto;
-      animation: run 0.6s steps(2) infinite;
-    }
-
-    .slot {
-      position: absolute;
-      bottom: 20px;
-      width: 60px;
-      height: 60px;
-      animation: moveSlot 5s linear forwards;
+    canvas {
+      display: block;
+      background: transparent;
     }
 
     .bonus-banner {
-      position: absolute;
+      position: fixed;
       top: 40%;
       left: 50%;
       transform: translate(-50%, -50%);
       background: #00ff88;
       color: #000;
-      font-size: 32px;
+      font-size: 36px;
+      font-weight: bold;
       padding: 20px 40px;
       border-radius: 12px;
       display: none;
+      z-index: 1000;
+      box-shadow: 0 0 20px #00ff88;
       animation: popUp 1s ease-out forwards;
-    }
-
-    @keyframes moveSlot {
-      0% { right: -60px; }
-      100% { right: 100vw; }
-    }
-
-    @keyframes run {
-      from { transform: translateY(0); }
-      to { transform: translateY(-2px); }
     }
 
     @keyframes popUp {
@@ -71,29 +43,120 @@
 </head>
 <body>
 
-  <div class="game-area">
-    <img src="https://i.imgur.com/MkXz03F.png" alt="Dino" class="dino" />
+<canvas id="gameCanvas"></canvas>
+<div class="bonus-banner" id="bonusBanner">🎉 BONO ACTIVADO 🎉</div>
 
-    <!-- Obstáculos tipo slot -->
-    <img src="https://i.imgur.com/lrmD8Up.png" alt="Slot 1" class="slot" style="animation-delay: 0.5s">
-    <img src="https://i.imgur.com/lrmD8Up.png" alt="Slot 2" class="slot" style="animation-delay: 1.5s">
-    <img src="https://i.imgur.com/lrmD8Up.png" alt="Slot 3" class="slot" style="animation-delay: 2.5s">
+<script>
+  const canvas = document.getElementById('gameCanvas');
+  const ctx = canvas.getContext('2d');
 
-    <!-- BONO -->
-    <div class="bonus-banner" id="bonus">🎉 BONO ACTIVADO 🎉</div>
-  </div>
+  let width = window.innerWidth;
+  let height = window.innerHeight;
+  canvas.width = width;
+  canvas.height = height;
 
-  <script>
-    // Mostrar BONO después de 4 segundos
-    setTimeout(() => {
-      document.getElementById('bonus').style.display = 'block';
-    }, 4000);
+  const logoImg = new Image();
+  logoImg.src = 'logo.png';
 
-    // Redirigir después de 6 segundos
-    setTimeout(() => {
-      window.location.href = "https://alpacaBet.co";
-    }, 6000);
-  </script>
+  const slotImg = new Image();
+  slotImg.src = 'https://i.imgur.com/lrmD8Up.png'; // imagen de tragamonedas
+
+  const player = {
+    x: 80,
+    y: height - 120,
+    width: 60,
+    height: 60,
+    velocityY: 0,
+    gravity: 1.5,
+    jumpPower: -20,
+    isJumping: false
+  };
+
+  const obstacles = [];
+  let frameCount = 0;
+  let gameRunning = true;
+
+  function drawPlayer() {
+    ctx.drawImage(logoImg, player.x, player.y, player.width, player.height);
+  }
+
+  function drawObstacle(ob) {
+    ctx.drawImage(slotImg, ob.x, ob.y, ob.width, ob.height);
+  }
+
+  function update() {
+    if (!gameRunning) return;
+
+    ctx.clearRect(0, 0, width, height);
+
+    // Movimiento del personaje
+    player.velocityY += player.gravity;
+    player.y += player.velocityY;
+
+    if (player.y > height - 120) {
+      player.y = height - 120;
+      player.velocityY = 0;
+      player.isJumping = false;
+    }
+
+    drawPlayer();
+
+    // Obstáculos
+    for (let i = obstacles.length - 1; i >= 0; i--) {
+      obstacles[i].x -= 6;
+      drawObstacle(obstacles[i]);
+
+      if (obstacles[i].x + obstacles[i].width < 0) {
+        obstacles.splice(i, 1);
+      }
+    }
+
+    // Generar obstáculos
+    if (frameCount % 90 === 0) {
+      obstacles.push({
+        x: width,
+        y: height - 100,
+        width: 50,
+        height: 50
+      });
+    }
+
+    frameCount++;
+    requestAnimationFrame(update);
+  }
+
+  function jump() {
+    if (!player.isJumping) {
+      player.velocityY = player.jumpPower;
+      player.isJumping = true;
+    }
+  }
+
+  document.addEventListener('click', jump);
+  document.addEventListener('touchstart', jump);
+
+  logoImg.onload = () => {
+    update();
+  };
+
+  // Mostrar BONO y redireccionar
+  setTimeout(() => {
+    document.getElementById('bonusBanner').style.display = 'block';
+  }, 5000);
+
+  setTimeout(() => {
+    window.location.href = "https://alpacaBet.co";
+  }, 7000);
+
+  // Redimensionar canvas si cambia el tamaño de pantalla
+  window.addEventListener('resize', () => {
+    width = window.innerWidth;
+    height = window.innerHeight;
+    canvas.width = width;
+    canvas.height = height;
+    player.y = height - 120;
+  });
+</script>
+
 </body>
 </html>
-
