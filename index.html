@@ -5,67 +5,95 @@
   <title>Redireccionándote a Alpaca...</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <style>
-    * {
-      box-sizing: border-box;
-    }
-
     body {
       margin: 0;
       padding: 0;
-      background: linear-gradient(135deg, #1a1a1a, #2a2a2a);
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: #111;
       color: #fff;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
-      text-align: center;
+      font-family: 'Courier New', monospace;
       overflow: hidden;
     }
 
-    .logo {
-      width: 160px;
+    .game-area {
+      position: relative;
+      width: 100vw;
+      height: 100vh;
+      background: #1a1a1a;
+      overflow: hidden;
+    }
+
+    .dino {
+      position: absolute;
+      bottom: 20px;
+      left: 50px;
+      width: 80px;
       height: auto;
-      margin-bottom: 20px;
-      animation: pulse 2s infinite;
-      filter: drop-shadow(0 0 10px #00ffcc);
+      animation: run 0.6s steps(2) infinite;
     }
 
-    h1 {
-      font-size: 24px;
-      color: #00ffcc;
-      margin-bottom: 10px;
-      animation: fadeIn 2s ease-in-out;
+    .slot {
+      position: absolute;
+      bottom: 20px;
+      width: 60px;
+      height: 60px;
+      animation: moveSlot 5s linear forwards;
     }
 
-    .sub {
-      font-size: 16px;
-      color: #ccc;
-      animation: fadeIn 3s ease-in-out;
+    .bonus-banner {
+      position: absolute;
+      top: 40%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background: #00ff88;
+      color: #000;
+      font-size: 32px;
+      padding: 20px 40px;
+      border-radius: 12px;
+      display: none;
+      animation: popUp 1s ease-out forwards;
     }
 
-    @keyframes pulse {
-      0%, 100% { transform: scale(1); }
-      50% { transform: scale(1.05); }
+    @keyframes moveSlot {
+      0% { right: -60px; }
+      100% { right: 100vw; }
     }
 
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(10px); }
-      to { opacity: 1; transform: translateY(0); }
+    @keyframes run {
+      from { transform: translateY(0); }
+      to { transform: translateY(-2px); }
+    }
+
+    @keyframes popUp {
+      0% { opacity: 0; transform: scale(0.5) translate(-50%, -50%); }
+      100% { opacity: 1; transform: scale(1) translate(-50%, -50%); }
     }
   </style>
 </head>
 <body>
 
-  <img src="logo.png" alt="Alpaca Logo" class="logo">
-  <h1>Conectando con la suerte...</h1>
-  <div class="sub">Estás entrando a <strong>AlpacaBet</strong></div>
+  <div class="game-area">
+    <img src="https://i.imgur.com/MkXz03F.png" alt="Dino" class="dino" />
+
+    <!-- Obstáculos tipo slot -->
+    <img src="https://i.imgur.com/lrmD8Up.png" alt="Slot 1" class="slot" style="animation-delay: 0.5s">
+    <img src="https://i.imgur.com/lrmD8Up.png" alt="Slot 2" class="slot" style="animation-delay: 1.5s">
+    <img src="https://i.imgur.com/lrmD8Up.png" alt="Slot 3" class="slot" style="animation-delay: 2.5s">
+
+    <!-- BONO -->
+    <div class="bonus-banner" id="bonus">🎉 BONO ACTIVADO 🎉</div>
+  </div>
 
   <script>
+    // Mostrar BONO después de 4 segundos
+    setTimeout(() => {
+      document.getElementById('bonus').style.display = 'block';
+    }, 4000);
+
+    // Redirigir después de 6 segundos
     setTimeout(() => {
       window.location.href = "https://alpacaBet.co";
-    }, 5000); // redirige en 5 segundos
+    }, 6000);
   </script>
 </body>
 </html>
+
