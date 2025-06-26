@@ -6,38 +6,42 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <style>
     html, body {
-      margin: 0; padding: 0; overflow: hidden;
+      margin: 0;
+      padding: 0;
+      overflow: hidden;
       background: #111;
       font-family: 'Segoe UI', sans-serif;
       height: 100vh;
-      position: relative;
     }
+
     #game {
       position: relative;
       width: 100vw;
       height: 100vh;
       overflow: hidden;
-      background: #1a1a1a;
     }
+
     #logo {
       position: absolute;
-      bottom: 20px;
-      left: 80px;
-      width: 80px;
-      transition: bottom 0.3s ease;
+      bottom: 15vh;
+      left: 10vw;
+      width: 18vw;
+      max-width: 100px;
+      transition: bottom 0.25s ease;
       z-index: 10;
       user-select: none;
       -webkit-user-drag: none;
     }
+
     .slots-container {
       position: absolute;
-      bottom: 20px;
-      right: 0;
-      width: 100vw;
-      height: 60px;
+      bottom: 12vh;
+      width: 100%;
+      height: 80px;
       overflow: visible;
       pointer-events: none;
     }
+
     .tenor-gif-embed {
       position: absolute !important;
       bottom: 0 !important;
@@ -45,24 +49,14 @@
       height: 60px !important;
       animation: moveSlot 4s linear infinite;
     }
-    /* Staggered animation delays for each slot */
-    .tenor-gif-embed:nth-child(1) {
-      animation-delay: 0s;
-    }
-    .tenor-gif-embed:nth-child(2) {
-      animation-delay: 1.5s;
-    }
-    .tenor-gif-embed:nth-child(3) {
-      animation-delay: 3s;
-    }
+
+    .tenor-gif-embed:nth-child(1) { animation-delay: 0s; }
+    .tenor-gif-embed:nth-child(2) { animation-delay: 1.5s; }
+    .tenor-gif-embed:nth-child(3) { animation-delay: 3s; }
 
     @keyframes moveSlot {
-      0% {
-        right: -70px;
-      }
-      100% {
-        right: 100vw;
-      }
+      0%   { right: -70px; }
+      100% { right: 110vw; }
     }
 
     .bonus {
@@ -73,12 +67,11 @@
       transform: translate(-50%, -50%);
       background: #00ff88;
       color: #000;
-      font-size: 36px;
-      padding: 20px 40px;
-      border-radius: 10px;
+      font-size: 6vw;
+      padding: 4vw 8vw;
+      border-radius: 12px;
       box-shadow: 0 0 20px #00ff88;
       z-index: 20;
-      user-select: none;
     }
   </style>
 </head>
@@ -86,8 +79,8 @@
 
 <div id="game">
   <img id="logo" src="logo.png" alt="Alpaca Logo" draggable="false" />
-  
-  <div class="slots-container" aria-hidden="true">
+
+  <div class="slots-container">
     <div class="tenor-gif-embed" data-postid="2714951271434056165" data-share-method="host" data-aspect-ratio="1" data-width="60px"></div>
     <div class="tenor-gif-embed" data-postid="2714951271434056165" data-share-method="host" data-aspect-ratio="1" data-width="60px"></div>
     <div class="tenor-gif-embed" data-postid="2714951271434056165" data-share-method="host" data-aspect-ratio="1" data-width="60px"></div>
@@ -100,21 +93,21 @@
 
 <script>
   const logo = document.getElementById('logo');
+
   function jump() {
-    logo.style.bottom = '150px';
+    logo.style.bottom = '35vh';
     setTimeout(() => {
-      logo.style.bottom = '20px';
+      logo.style.bottom = '15vh';
     }, 350);
   }
+
   document.addEventListener('click', jump);
   document.addEventListener('touchstart', jump);
 
-  // Mostrar el banner BONO después de 5 segundos
   setTimeout(() => {
     document.getElementById('bonus').style.display = 'block';
   }, 5000);
 
-  // Redireccionar a AlpacaBet después de 7 segundos
   setTimeout(() => {
     window.location.href = "https://alpacaBet.co";
   }, 7000);
