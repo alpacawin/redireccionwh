@@ -1,24 +1,72 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
   <title>Redireccionándote a Alpaca...</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <style>
     html, body {
-      margin: 0;
-      padding: 0;
-      overflow: hidden;
-      background: linear-gradient(145deg, #0d0d0d, #1a1a1a);
+      margin: 0; padding: 0; overflow: hidden;
+      background: #111;
       font-family: 'Segoe UI', sans-serif;
+      height: 100vh;
+      position: relative;
+    }
+    #game {
+      position: relative;
+      width: 100vw;
+      height: 100vh;
+      overflow: hidden;
+      background: #1a1a1a;
+    }
+    #logo {
+      position: absolute;
+      bottom: 20px;
+      left: 80px;
+      width: 80px;
+      transition: bottom 0.3s ease;
+      z-index: 10;
+      user-select: none;
+      -webkit-user-drag: none;
+    }
+    .slots-container {
+      position: absolute;
+      bottom: 20px;
+      right: 0;
+      width: 100vw;
+      height: 60px;
+      overflow: visible;
+      pointer-events: none;
+    }
+    .tenor-gif-embed {
+      position: absolute !important;
+      bottom: 0 !important;
+      width: 60px !important;
+      height: 60px !important;
+      animation: moveSlot 4s linear infinite;
+    }
+    /* Staggered animation delays for each slot */
+    .tenor-gif-embed:nth-child(1) {
+      animation-delay: 0s;
+    }
+    .tenor-gif-embed:nth-child(2) {
+      animation-delay: 1.5s;
+    }
+    .tenor-gif-embed:nth-child(3) {
+      animation-delay: 3s;
     }
 
-    canvas {
-      display: block;
-      background: transparent;
+    @keyframes moveSlot {
+      0% {
+        right: -70px;
+      }
+      100% {
+        right: 100vw;
+      }
     }
 
-    .bonus-banner {
+    .bonus {
+      display: none;
       position: fixed;
       top: 40%;
       left: 50%;
@@ -26,136 +74,50 @@
       background: #00ff88;
       color: #000;
       font-size: 36px;
-      font-weight: bold;
       padding: 20px 40px;
-      border-radius: 12px;
-      display: none;
-      z-index: 1000;
+      border-radius: 10px;
       box-shadow: 0 0 20px #00ff88;
-      animation: popUp 1s ease-out forwards;
-    }
-
-    @keyframes popUp {
-      0% { opacity: 0; transform: scale(0.5) translate(-50%, -50%); }
-      100% { opacity: 1; transform: scale(1) translate(-50%, -50%); }
+      z-index: 20;
+      user-select: none;
     }
   </style>
 </head>
 <body>
 
-<canvas id="gameCanvas"></canvas>
-<div class="bonus-banner" id="bonusBanner">🎉 BONO ACTIVADO 🎉</div>
+<div id="game">
+  <img id="logo" src="logo.png" alt="Alpaca Logo" draggable="false" />
+  
+  <div class="slots-container" aria-hidden="true">
+    <div class="tenor-gif-embed" data-postid="2714951271434056165" data-share-method="host" data-aspect-ratio="1" data-width="60px"></div>
+    <div class="tenor-gif-embed" data-postid="2714951271434056165" data-share-method="host" data-aspect-ratio="1" data-width="60px"></div>
+    <div class="tenor-gif-embed" data-postid="2714951271434056165" data-share-method="host" data-aspect-ratio="1" data-width="60px"></div>
+  </div>
+</div>
+
+<div class="bonus" id="bonus">🎉 BONO ACTIVADO 🎉</div>
+
+<script type="text/javascript" async src="https://tenor.com/embed.js"></script>
 
 <script>
-  const canvas = document.getElementById('gameCanvas');
-  const ctx = canvas.getContext('2d');
-
-  let width = window.innerWidth;
-  let height = window.innerHeight;
-  canvas.width = width;
-  canvas.height = height;
-
-  const logoImg = new Image();
-  logoImg.src = 'logo.png';
-
-  const slotImg = new Image();
-  slotImg.src = 'https://i.imgur.com/lrmD8Up.png'; // imagen de tragamonedas
-
-  const player = {
-    x: 80,
-    y: height - 120,
-    width: 60,
-    height: 60,
-    velocityY: 0,
-    gravity: 1.5,
-    jumpPower: -20,
-    isJumping: false
-  };
-
-  const obstacles = [];
-  let frameCount = 0;
-  let gameRunning = true;
-
-  function drawPlayer() {
-    ctx.drawImage(logoImg, player.x, player.y, player.width, player.height);
-  }
-
-  function drawObstacle(ob) {
-    ctx.drawImage(slotImg, ob.x, ob.y, ob.width, ob.height);
-  }
-
-  function update() {
-    if (!gameRunning) return;
-
-    ctx.clearRect(0, 0, width, height);
-
-    // Movimiento del personaje
-    player.velocityY += player.gravity;
-    player.y += player.velocityY;
-
-    if (player.y > height - 120) {
-      player.y = height - 120;
-      player.velocityY = 0;
-      player.isJumping = false;
-    }
-
-    drawPlayer();
-
-    // Obstáculos
-    for (let i = obstacles.length - 1; i >= 0; i--) {
-      obstacles[i].x -= 6;
-      drawObstacle(obstacles[i]);
-
-      if (obstacles[i].x + obstacles[i].width < 0) {
-        obstacles.splice(i, 1);
-      }
-    }
-
-    // Generar obstáculos
-    if (frameCount % 90 === 0) {
-      obstacles.push({
-        x: width,
-        y: height - 100,
-        width: 50,
-        height: 50
-      });
-    }
-
-    frameCount++;
-    requestAnimationFrame(update);
-  }
-
+  const logo = document.getElementById('logo');
   function jump() {
-    if (!player.isJumping) {
-      player.velocityY = player.jumpPower;
-      player.isJumping = true;
-    }
+    logo.style.bottom = '150px';
+    setTimeout(() => {
+      logo.style.bottom = '20px';
+    }, 350);
   }
-
   document.addEventListener('click', jump);
   document.addEventListener('touchstart', jump);
 
-  logoImg.onload = () => {
-    update();
-  };
-
-  // Mostrar BONO y redireccionar
+  // Mostrar el banner BONO después de 5 segundos
   setTimeout(() => {
-    document.getElementById('bonusBanner').style.display = 'block';
+    document.getElementById('bonus').style.display = 'block';
   }, 5000);
 
+  // Redireccionar a AlpacaBet después de 7 segundos
   setTimeout(() => {
     window.location.href = "https://alpacaBet.co";
   }, 7000);
-
-  // Redimensionar canvas si cambia el tamaño de pantalla
-  window.addEventListener('resize', () => {
-    width = window.innerWidth;
-    height = window.innerHeight;
-    canvas.width = width;
-    canvas.height = height;
-    player.y = height - 120;
-  });
 </script>
 
 </body>
