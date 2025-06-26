@@ -1,178 +1,109 @@
 <!DOCTYPE html>
-<html lang="es">
+<html>
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>AlpacaBet</title>
-
-  <!-- Meta Pixel Code -->
-  <script>
-    !function(f,b,e,v,n,t,s)
-    {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
-    n.callMethod.apply(n,arguments):n.queue.push(arguments)};
-    if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
-    n.queue=[];t=b.createElement(e);t.async=!0;
-    t.src=v;s=b.getElementsByTagName(e)[0];
-    s.parentNode.insertBefore(t,s)}(window, document,'script',
-    'https://connect.facebook.net/en_US/fbevents.js');
-    fbq('init', '1048295967252620'); 
-    fbq('track', 'PageView');
-  </script>
-  <noscript>
-    <img height="1" width="1" style="display:none"
-      src="https://www.facebook.com/tr?id=1048295967252620&ev=PageView&noscript=1"/>
-  </noscript>
-  <!-- End Meta Pixel Code -->
-
+  <title>Redireccionándote a Alpaca...</title>
   <style>
-    * {
-      box-sizing: border-box;
-    }
-
     body {
       margin: 0;
+      background: #f7f7f7;
       font-family: Arial, sans-serif;
-      background-color: #ec1e49;
-      color: white;
-      overflow-x: hidden;
-      background-image: url('background.jpg');
-      background-size: cover;
-      background-position: center;
-      background-repeat: no-repeat;
+      text-align: center;
     }
 
-    body::before {
-      content: "";
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background-color: rgba(0, 0, 0, 0.6);
-      z-index: -1;
+    canvas {
+      display: block;
+      margin: 0 auto;
+      background: #fff;
+      border: 2px solid #ccc;
     }
 
-    .container {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: flex-start;
-      min-height: 100vh;
-      padding: 20px;
-      position: relative;
-    }
-
-    .logo {
-      width: 100vw;
-      max-width: 500px;
-      height: auto;
-      margin-top: 40px;
-      margin-bottom: 80px;
-    }
-
-    .bubble {
-      position: absolute;
-      background-color: white;
-      color: black;
-      border: 2px solid #161e2a;
-      border-radius: 25px;
-      padding: 10px 15px;
-      max-width: 85vw;
-      display: flex;
-      align-items: center;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.2);
-      opacity: 0;
-      animation: fadeInOut 16s infinite;
-    }
-
-    .bubble img {
-      width: 40px;
-      height: 40px;
-      border-radius: 50%;
-      margin-right: 10px;
-    }
-
-    .bubble span {
-      font-size: 0.95rem;
-    }
-
-    .bubble:nth-child(2) {
-      animation-delay: 0s;
-      top: 60%;
-    }
-    .bubble:nth-child(3) {
-      animation-delay: 4s;
-      top: 70%;
-    }
-    .bubble:nth-child(4) {
-      animation-delay: 8s;
-      top: 80%;
-    }
-    .bubble:nth-child(5) {
-      animation-delay: 12s;
-      top: 90%;
-    }
-
-    @keyframes fadeInOut {
-      0%, 100% { opacity: 0; transform: translateY(20px); }
-      10%, 25% { opacity: 1; transform: translateY(0); }
-      30%, 90% { opacity: 0; transform: translateY(-20px); }
-    }
-
-    .whatsapp-button {
-      background-color: #25D366;
-      color: #161e2a;
-      padding: 15px 30px;
-      font-size: 18px;
-      border: none;
-      border-radius: 30px;
-      cursor: pointer;
-      margin-top: 60px;
-    }
-
-    @media (max-width: 480px) {
-      .bubble {
-        max-width: 90vw;
-        padding: 10px;
-      }
-
-      .whatsapp-button {
-        width: 90vw;
-        font-size: 16px;
-      }
+    h2 {
+      margin-top: 20px;
+      font-size: 24px;
+      color: #333;
     }
   </style>
-
-  <script>
-    setTimeout(() => {
-      window.location.href = "https://wa.me/5491132521922";
-    }, 20000);
-  </script>
 </head>
 <body>
-  <div class="container">
-    <img src="logo.png" alt="Alpaca Logo" class="logo">
+  <h2>Redireccionándote a Alpaca...</h2>
+  <canvas id="gameCanvas" width="800" height="200"></canvas>
 
-    <div class="bubble">
-      <img src="https://randomuser.me/api/portraits/women/1.jpg" alt="">
-      <span>¡Me encanta AlpacaBet!</span>
-    </div>
-    <div class="bubble">
-      <img src="https://randomuser.me/api/portraits/men/2.jpg" alt="">
-      <span>¡Muy divertido jugar acá!</span>
-    </div>
-    <div class="bubble">
-      <img src="https://randomuser.me/api/portraits/women/3.jpg" alt="">
-      <span>Siempre gano bonos</span>
-    </div>
-    <div class="bubble">
-      <img src="https://randomuser.me/api/portraits/men/4.jpg" alt="">
-      <span>¡La mejor app de apuestas!</span>
-    </div>
+  <script>
+    const canvas = document.getElementById('gameCanvas');
+    const ctx = canvas.getContext('2d');
 
-    <a href="https://wa.me/5491168276697">
-      <button class="whatsapp-button"><strong>HABLÁNOS POR WHATSAPP</strong></button>
-    </a>
-  </div>
+    let alpaca = {
+      x: 50,
+      y: 150,
+      width: 40,
+      height: 40,
+      velocityY: 0,
+      gravity: 1.5,
+      jumpPower: -20,
+      onGround: true
+    };
+
+    let obstacles = [];
+    const alpacaImg = new Image();
+    alpacaImg.src = 'https://i.imgur.com/Ki6Xsyc.png'; // Imagen alpaca 🦙
+
+    function drawAlpaca() {
+      ctx.drawImage(alpacaImg, alpaca.x, alpaca.y, alpaca.width, alpaca.height);
+    }
+
+    function drawObstacle(obstacle) {
+      ctx.fillStyle = '#444';
+      ctx.fillRect(obstacle.x, obstacle.y, obstacle.width, obstacle.height);
+    }
+
+    function update() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+      // Movimiento
+      alpaca.velocityY += alpaca.gravity;
+      alpaca.y += alpaca.velocityY;
+
+      if (alpaca.y >= 150) {
+        alpaca.y = 150;
+        alpaca.velocityY = 0;
+        alpaca.onGround = true;
+      }
+
+      drawAlpaca();
+
+      // Obstáculos animados
+      for (let i = 0; i < obstacles.length; i++) {
+        obstacles[i].x -= 5;
+        drawObstacle(obstacles[i]);
+      }
+
+      if (Math.random() < 0.02) {
+        obstacles.push({
+          x: canvas.width,
+          y: 160,
+          width: 20,
+          height: 40
+        });
+      }
+
+      requestAnimationFrame(update);
+    }
+
+    document.addEventListener('keydown', () => {
+      if (alpaca.onGround) {
+        alpaca.velocityY = alpaca.jumpPower;
+        alpaca.onGround = false;
+      }
+    });
+
+    alpacaImg.onload = () => {
+      update();
+    };
+
+    // ⏳ Redirección automática a AlpacaBet
+    setTimeout(() => {
+      window.location.href = "https://alpacaBet.co";
+    }, 8000); // redirige en 8 segundos
+  </script>
 </body>
 </html>
