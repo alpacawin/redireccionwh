@@ -1,109 +1,56 @@
 <!DOCTYPE html>
-<html>
+<html lang="es">
 <head>
+  <meta charset="UTF-8">
   <title>Redireccionándote a Alpaca...</title>
   <style>
     body {
       margin: 0;
+      padding: 0;
       background: #f7f7f7;
-      font-family: Arial, sans-serif;
+      font-family: 'Courier New', monospace;
+      color: #555;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
       text-align: center;
     }
 
-    canvas {
-      display: block;
-      margin: 0 auto;
-      background: #fff;
-      border: 2px solid #ccc;
+    img {
+      width: 120px;
+      height: auto;
+      margin-bottom: 20px;
+      animation: jump 1s infinite ease-in-out;
     }
 
-    h2 {
-      margin-top: 20px;
-      font-size: 24px;
-      color: #333;
+    h1 {
+      font-size: 18px;
+      margin: 0;
+    }
+
+    @keyframes jump {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-10px); }
+    }
+
+    .info {
+      font-size: 14px;
+      color: #999;
+      margin-top: 10px;
     }
   </style>
 </head>
 <body>
-  <h2>Redireccionándote a Alpaca...</h2>
-  <canvas id="gameCanvas" width="800" height="200"></canvas>
+  <img src="logo.png" alt="AlpacaBot">
+  <h1>Redireccionándote a Alpaca...</h1>
+  <div class="info">Si no sos redirigido, hacé clic <a href="https://alpacaBet.co">aquí</a>.</div>
 
   <script>
-    const canvas = document.getElementById('gameCanvas');
-    const ctx = canvas.getContext('2d');
-
-    let alpaca = {
-      x: 50,
-      y: 150,
-      width: 40,
-      height: 40,
-      velocityY: 0,
-      gravity: 1.5,
-      jumpPower: -20,
-      onGround: true
-    };
-
-    let obstacles = [];
-    const alpacaImg = new Image();
-    alpacaImg.src = 'https://i.imgur.com/Ki6Xsyc.png'; // Imagen alpaca 🦙
-
-    function drawAlpaca() {
-      ctx.drawImage(alpacaImg, alpaca.x, alpaca.y, alpaca.width, alpaca.height);
-    }
-
-    function drawObstacle(obstacle) {
-      ctx.fillStyle = '#444';
-      ctx.fillRect(obstacle.x, obstacle.y, obstacle.width, obstacle.height);
-    }
-
-    function update() {
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-      // Movimiento
-      alpaca.velocityY += alpaca.gravity;
-      alpaca.y += alpaca.velocityY;
-
-      if (alpaca.y >= 150) {
-        alpaca.y = 150;
-        alpaca.velocityY = 0;
-        alpaca.onGround = true;
-      }
-
-      drawAlpaca();
-
-      // Obstáculos animados
-      for (let i = 0; i < obstacles.length; i++) {
-        obstacles[i].x -= 5;
-        drawObstacle(obstacles[i]);
-      }
-
-      if (Math.random() < 0.02) {
-        obstacles.push({
-          x: canvas.width,
-          y: 160,
-          width: 20,
-          height: 40
-        });
-      }
-
-      requestAnimationFrame(update);
-    }
-
-    document.addEventListener('keydown', () => {
-      if (alpaca.onGround) {
-        alpaca.velocityY = alpaca.jumpPower;
-        alpaca.onGround = false;
-      }
-    });
-
-    alpacaImg.onload = () => {
-      update();
-    };
-
-    // ⏳ Redirección automática a AlpacaBet
     setTimeout(() => {
       window.location.href = "https://alpacaBet.co";
-    }, 8000); // redirige en 8 segundos
+    }, 5000); // 5 segundos
   </script>
 </body>
 </html>
