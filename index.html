@@ -95,7 +95,18 @@
   <div class="urgencia">⏳ Bonos limitados. Solo por hoy.</div>
 </div>
 
+<!-- Script para trackear clics en el botón -->
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    const boton = document.querySelector('.boton');
+    if (boton) {
+      boton.addEventListener('click', function () {
+        fbq('track', 'Lead'); // Evento enviado a Meta Pixel
+      });
+    }
+  });
+</script>
+
 </body>
 </html>
 
-</html>
